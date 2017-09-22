@@ -4,8 +4,8 @@ Bamazon is a simple node.js command line interface that connects to a MySQL data
 
 ## Customer View
 1. The customer is able to only purchase products which are pulled from the database.
-As you can see below the user is shown a table of products, and is prompted to select an item and quantity. Upon selection, the user is given the total price for the quantity of the selected product.
-![customer view screenshot](images/customer.png)
+As you can see below the user is shown a table of products, and is prompted to select an item and quantity. Upon selection, the user is given the total price for the quantity of the product that they selected.
+[customer view screenshot](images/customer.png)
 
 ## Manager View
 1. Unlike the Customer view, the Manager view is capable of performing multiple actions.
@@ -20,7 +20,7 @@ As you can see below the user is shown a table of products, and is prompted to s
 4. The manager can also view only products that are low on inventory (less than 5.)
 ![manager low screenshot](images/manager-low.png)
 
-5. Of course, the manager can restock any of the products.
+5. Of course, the manager can restock any of the products regardless of the inventory amount.
 ![manager stock screenshot](images/manager-stock.png)
 
 ## Video Demonstration
