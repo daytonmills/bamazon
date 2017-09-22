@@ -63,9 +63,45 @@ var manager = {
             if (products.length > 0) {
                 console.table(products);
             } else {
-                console.log(chalk.yellow("Inventory is Full!"));
+                console.log(chalk.yellow('Inventory is Full!'));
             }
             connection.end();
         });
     },
+
+    addProduct: function()
+    {
+        inquirer.prompt([{
+                message: 'Enter the product name',
+                type: 'input',
+                name: 'name'
+            },
+            {
+                message: 'Enter the product department',
+                type: 'input',
+                name: 'department'
+            },
+            {
+                message: 'Enter the product price',
+                type: 'input',
+                name: 'price'
+            },
+            {
+                message: 'Enter the product quantity',
+                type: 'input',
+                name: 'quantity'
+            }]).then(function (product) {
+                connection.query('INSERT INTO `products` SET ?',
+                {
+                    product_name: product.name,
+                    department_name: product.department,
+                    price: product.price,
+                    stock_quantity: product.quantity
+                }, (error, response) => {
+                    if (error) throw error;
+                    console.log(chalk.green(response.affectedRows + ' product has been added!\n'));
+                    manager.viewProducts();
+                });
+            });
+    }
 }
