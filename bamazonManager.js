@@ -51,7 +51,6 @@ var manager = {
         {
             console.table(products);
             if (callback) callback();
-            connection.end();
         });
     },
 
@@ -103,5 +102,39 @@ var manager = {
                     manager.viewProducts();
                 });
             });
+    },
+
+    addInventory: function()
+    {
+        this.viewProducts(prompt);
+        function prompt()
+        {
+            inquirer.prompt([{
+                message: 'Enter the item id you wish to restock',
+                type: 'input',
+                name: 'id'
+            },
+            {
+                message: 'Enter the amount to add to quantity',
+                type: 'input',
+                name: 'quantity'
+            }]).then(function (inventory)
+            {
+                connection.query('SELECT `stock_quantity` FROM `products` WHERE `item_id` = ?',
+                [inventory.id], (error, product) =>
+                {
+                    let newAmount = parseInt(product[0].stock_quantity) + parseInt(inventory.quantity);
+
+                    connection.query('UPDATE `products` SET ? WHERE ?',
+                    [{stock_quantity: newAmount},{item_id: inventory.id}],
+                    (error, response, fields) =>
+                    {
+                        if(error) throw error;
+                        console.log(chalk.green(response.affectedRows + ' product quantity has been updated!\n'));
+                        manager.viewProducts();
+                    });
+                });
+            });
+        }
     }
 }
