@@ -30,7 +30,7 @@ var manager = {
             switch (options.action)
             {
                 case 'View Products For Sale':
-                    this.viewProducts();
+                    this.viewProducts(false);
                     break;
                 case 'View Low Inventory':
                     this.viewInventory();
@@ -45,12 +45,13 @@ var manager = {
         });
     },
 
-    viewProducts: function(callback)
+    viewProducts: function(connect, callback)
     {
         connection.query('SELECT * FROM products', (error, products) =>
         {
             console.table(products);
             if (callback) callback();
+            if (!connect) connection.end();
         });
     },
 
@@ -64,8 +65,8 @@ var manager = {
             } else {
                 console.log(chalk.yellow('Inventory is Full!'));
             }
-            connection.end();
         });
+        connection.end();
     },
 
     addProduct: function()
@@ -99,14 +100,14 @@ var manager = {
                 }, (error, response) => {
                     if (error) throw error;
                     console.log(chalk.green(response.affectedRows + ' product has been added!\n'));
-                    manager.viewProducts();
+                    manager.viewProducts(false);
                 });
             });
     },
 
     addInventory: function()
     {
-        this.viewProducts(prompt);
+        this.viewProducts(true, prompt);
         function prompt()
         {
             inquirer.prompt([{
@@ -131,7 +132,7 @@ var manager = {
                     {
                         if(error) throw error;
                         console.log(chalk.green(response.affectedRows + ' product quantity has been updated!\n'));
-                        manager.viewProducts();
+                        manager.viewProducts(false);
                     });
                 });
             });
